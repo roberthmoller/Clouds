@@ -1,0 +1,10 @@
+{
+  "configurations": [
+    {
+      "type": "command",
+      "name": "integral",
+      "program": "python3",
+      "args": ["integral.py"],
+    }
+  ]
+}
