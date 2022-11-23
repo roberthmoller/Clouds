@@ -15,6 +15,9 @@
 		{
 			"name": "part4",
 			"path": "part4"
+		},
+		{
+			"path": "part5"
 		}
 	],
 	"settings": {
