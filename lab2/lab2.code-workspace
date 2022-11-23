@@ -1,22 +1,6 @@
 {
 	"folders": [
 		{
-			"name": "locust",
-			"path": "locust"
-		},
-		{
-			"name": "part1",
-			"path": "part1"
-		},
-		{
-			"name": "part2",
-			"path": "part2"
-		},
-		{
-			"name": "part4",
-			"path": "part4"
-		},
-		{
 			"path": "part5"
 		}
 	],
