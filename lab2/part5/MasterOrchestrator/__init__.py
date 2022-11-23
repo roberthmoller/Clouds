@@ -13,28 +13,40 @@ from functools import reduce
 import azure.functions as func
 import azure.durable_functions as df
 
+
 def orchestrator_function(context: df.DurableOrchestrationContext):
-    file_content = "hello world\nI'm stressed"
-    
+    file_content = """
+        Oh-oh-oh
+        Let's go fly a kite
+        Up to the highest height
+        Let's go fly a kite
+        And send it soaring
+        Up through the atmosphere
+        Up where the air is clear
+        Oh, let's go fly a kite
+    """
+
     mappers = [
         context.call_activity("Mapper", json.dumps((linenumber, line)))
         for linenumber, line in enumerate(file_content.split('\n'))
     ]
     mapresults = yield context.task_all(mappers)
-    flatmapresults = reduce(lambda a, b: a+b, mapresults)
+    flatmapresults = list(reduce(lambda a, b: a+b, mapresults))
 
-    logging.log(logging.INFO, f"Flat map results: {flatmapresults}")
-    # shuffleresults = context.call_activity("Shuffle", map(mapresults))
+    logging.log(logging.INFO, f"Mapper <- {flatmapresults}")
+    shuffleresults = yield context.call_activity("Shuffler", json.dumps(flatmapresults))
+    logging.log(logging.INFO, f"Shuffler <- {shuffleresults}")
 
-    # reducers = [
-    #     context.call_activity("Reducer", group)
-    #     for group in shuffleresults
-    # ]
-    # reduceresults = yield context.task_all(reducers)
+    reducers = [
+        context.call_activity("Reducer", json.dumps(group))
+        for group in shuffleresults.items()
+    ]
+    reduceresults = yield context.task_all(reducers)
+    logging.log(logging.INFO, f"Reducer <- {reduceresults}")
 
-    # return reduceresults
+    return reduceresults
     # return shuffleresults
-    return mapresults
+    # return mapresults
 
 
 main = df.Orchestrator.create(orchestrator_function)

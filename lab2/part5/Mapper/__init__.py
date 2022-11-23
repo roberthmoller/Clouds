@@ -12,5 +12,6 @@ from typing import List, Tuple
 
 
 def main(keyvalue: str) -> List[Tuple[str, int]]:
+    logging.log(logging.INFO, f"map -> {keyvalue}")
     linenumber, line = json.loads(keyvalue)
     return list(map(lambda word: (word, 1), line.split()))

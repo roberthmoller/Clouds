@@ -2,7 +2,7 @@
   "scriptFile": "__init__.py",
   "bindings": [
     {
-      "name": "name",
+      "name": "words",
       "type": "activityTrigger",
       "direction": "in"
     }

@@ -6,11 +6,12 @@
 # - add azure-functions-durable to requirements.txt
 # - run pip install -r requirements.txt
 
+import json
 import logging
 from functools import reduce
 
 
 def main(keyvalues: str) -> str:
-    words = map(lambda wordandone: wordandone.split('|'), keyvalues.split(','))
-    logging.log(logging.INFO, f"Words: {words}")
-    return (words[0][0], reduce(lambda count, word: count+1, words, 0))
+    logging.log(logging.INFO, f"reduce -> {keyvalues}")
+    key, values = json.loads(keyvalues)
+    return (key, reduce(lambda a, b: a+b, values))
