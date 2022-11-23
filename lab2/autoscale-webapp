@@ -1,0 +1,14 @@
+az monitor autoscale create --resource-group roberthmoller-lab2webapp_group \ 
+--resource AS-roberthmollerlab2webappgroup-9a50 \
+--resource-type Microsoft.Web/serverFarms \
+--name Lab2WebAppAutoScale \
+--min-count 1 \
+--max-count 3 \
+--count 1
+
+
+
+az monitor autoscale rule create  --resource-group roberthmoller-lab2webapp_group  \
+--autoscale-name Lab2WebAppAutoScale \
+--condition "Percentage CPU > 50 avg 1m" \
+--scale in 1

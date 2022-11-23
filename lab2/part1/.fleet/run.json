@@ -1,0 +1,55 @@
+{
+  "configurations": [
+    {
+      "type": "command",
+      "name": "integral",
+      "program": "python3",
+      "args": [
+        "integral.py"
+      ]
+    },
+    {
+      "type": "command",
+      "name": "microservice",
+      "program": "flask",
+      "args": [
+        "--app",
+        "microservice.py",
+        "run"
+      ]
+    },
+    {
+      "type": "command",
+      "name": "pip install",
+      "program": "pip3",
+      "args": [
+        "install",
+        "-r",
+        "requirements.txt"
+      ]
+    },
+    {
+      "type": "command",
+      "name": "curl",
+      "program": "curl",
+      "args": [
+        "http://127.0.0.1:5000/integral/0/14159"
+      ]
+    },
+    {
+      "type": "command",
+      "name": "locust",
+      "program": "locust",
+      
+      "args": [
+        "-f",
+        "loadtest.py",
+        "--headless",
+        "-u",
+        "100",
+        "--run-time",
+        "3m"
+      ]
+    }
+  ]
+}
