@@ -15,33 +15,28 @@ import azure.durable_functions as df
 
 
 def orchestrator_function(context: df.DurableOrchestrationContext):
-    file_content = """
-        Oh-oh-oh
-        Let's go fly a kite
-        Up to the highest height
-        Let's go fly a kite
-        And send it soaring
-        Up through the atmosphere
-        Up where the air is clear
-        Oh, let's go fly a kite
-    """
+    inputs = yield context.call_activity("getInputDataFn")
+    logging.log(logging.INFO, f"getInputDataFn <- {inputs}")
+    inputlines = reduce(
+        lambda a, b: a+b, list(map(lambda file: file.split("\r\n"), inputs)))
+    # I'm not sure what you want here. I'm assunimg you want to read all files and do the wordcount over all of them.
 
     mappers = [
         context.call_activity("Mapper", json.dumps((linenumber, line)))
-        for linenumber, line in enumerate(file_content.split('\n'))
+        for linenumber, line in enumerate(inputlines)
     ]
-    mapresults = yield context.task_all(mappers)
-    flatmapresults = list(reduce(lambda a, b: a+b, mapresults))
+    mapresults= yield context.task_all(mappers)
+    flatmapresults= list(reduce(lambda a, b: a+b, mapresults))
 
     logging.log(logging.INFO, f"Mapper <- {flatmapresults}")
-    shuffleresults = yield context.call_activity("Shuffler", json.dumps(flatmapresults))
+    shuffleresults=yield context.call_activity("Shuffler", json.dumps(flatmapresults))
     logging.log(logging.INFO, f"Shuffler <- {shuffleresults}")
 
-    reducers = [
+    reducers=[
         context.call_activity("Reducer", json.dumps(group))
         for group in shuffleresults.items()
     ]
-    reduceresults = yield context.task_all(reducers)
+    reduceresults= yield context.task_all(reducers)
     logging.log(logging.INFO, f"Reducer <- {reduceresults}")
 
     return reduceresults
@@ -49,4 +44,4 @@ def orchestrator_function(context: df.DurableOrchestrationContext):
     # return mapresults
 
 
-main = df.Orchestrator.create(orchestrator_function)
+main= df.Orchestrator.create(orchestrator_function)
